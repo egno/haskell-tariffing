@@ -40,43 +40,31 @@ instance Divisible Consumption where
 data Price = Price {consumption :: Consumption, money :: Money}
     deriving (Show, Eq, Ord)
 
-consumptionPrice :: Consumption -> Price -> Maybe Price
-consumptionPrice c1 (Price c2 m) = fractionalPrice $ fraction c1 c2
+newtype Cost = Cost Price
+    deriving (Show, Eq, Ord)
+
+cost :: Consumption -> Price -> Maybe Cost
+cost c1 (Price c2 m) = fractionalPrice $ fraction c1 c2
   where
     fractionalPrice Nothing = Nothing
     fractionalPrice (Just part) =
         Just $
-            Price
+            Cost Price
                 { consumption = c1
                 , money = multiply m part
                 }
 
-calculatePrices :: Consumption -> [Price] -> [Price]
-calculatePrices c = mapMaybe (consumptionPrice c)
 
-currencyPrices :: String -> [Price] -> [Price]
-currencyPrices c = filter (\(Price _ (Money c1 _)) -> c1 == c)
+calculateCosts :: Consumption -> [Price] -> [Cost]
+calculateCosts c = mapMaybe (cost c)
 
-currencyMoney :: String -> [Price] -> Maybe Money
-currencyMoney c ps = foldMoney $ currencyPrices c ps
+currencyCosts :: String -> [Cost] -> [Cost]
+currencyCosts c = filter (\(Cost (Price _ (Money c1 _))) -> c1 == c)
+
+currencyMoney :: String -> [Cost] -> Maybe Money
+currencyMoney c ps = foldMoney $ currencyCosts c ps
   where
     foldMoney [] = Nothing
     foldMoney ps1 = foldr addMoney Nothing ps1
-    addMoney (Price _ (Money _ k)) (Just (Money c1 ks)) = Just $ Money c1 (ks + k)
-    addMoney (Price _ m) Nothing = Just m
-
--- examples
-minute :: Unit
-minute = Unit "min"
-
-fullPriceList :: [Price]
-fullPriceList =
-    [ Price{consumption = Consumption (Metric "vcc") (Volume minute 60.0), money = Money "USD" 0.383}
-    , Price{consumption = Consumption (Metric "bm") (Volume minute 60.0), money = Money "USD" 0.718}
-    ]
-
-prices :: [Price]
-prices = calculatePrices (Consumption (Metric "vcc") (Volume minute (60.0 * 60.0 * 24.0) )) fullPriceList
-
-totalMoney :: Maybe Money
-totalMoney = currencyMoney "USD" prices
+    addMoney (Cost (Price _ (Money _ k))) (Just (Money c1 ks)) = Just $ Money c1 (ks + k)
+    addMoney (Cost (Price _ m)) Nothing = Just m
