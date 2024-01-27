@@ -1,4 +1,5 @@
 module Metric where
 
-newtype Metric = Metric String
-    deriving (Show, Eq, Ord)
+newtype Metric where
+  Metric :: String -> Metric
+  deriving (Show, Eq, Ord)

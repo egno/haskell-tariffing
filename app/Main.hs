@@ -1,8 +1,10 @@
 module Main where
 
-import qualified MyLib (someFunc)
+import Example
 
 main :: IO ()
 main = do
-  putStrLn "Hello, Haskell!"
-  MyLib.someFunc
+  print test_metric
+  print test_volume
+  print totalMoney
+

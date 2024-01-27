@@ -60,7 +60,13 @@ library
   import:           warnings
 
   -- Modules exported by the library.
-  exposed-modules:  MyLib
+  exposed-modules:
+    DivisibleClass
+    Example
+    Metric
+    Money
+    Price
+    Unit
 
   -- Modules included in this library but not exported.
   -- other-modules:
@@ -70,8 +76,8 @@ library
 
   -- Other library packages from which modules are imported.
   build-depends:
-    , base    ^>=4.18.0.0
-    , hashable ^>=1.4.3.0
+    , base      ^>=4.18.0.0
+    , hashable  ^>=1.4.3.0
 
   -- Directories containing source files.
   hs-source-dirs:   src
