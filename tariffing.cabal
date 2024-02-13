@@ -61,12 +61,15 @@ library
 
   -- Modules exported by the library.
   exposed-modules:
+    Consumption
+    Cost
     DivisibleClass
     Example
     Metric
     Money
     Price
     Unit
+    Volume
 
   -- Modules included in this library but not exported.
   -- other-modules:

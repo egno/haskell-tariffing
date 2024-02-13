@@ -6,5 +6,5 @@ main :: IO ()
 main = do
   print test_metric
   print test_volume
-  print totalMoney
+  print costs
 
