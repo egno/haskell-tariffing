@@ -61,15 +61,18 @@ library
 
   -- Modules exported by the library.
   exposed-modules:
-    Consumption
-    Cost
-    DivisibleClass
     Example
-    Metric
-    Money
     Price
-    Unit
-    Volume
+    Price.ConsumableClass
+    Price.Consumption
+    Price.Cost
+    Price.DivisibleClass
+    Price.Metric
+    Price.Money
+    Price.Rule.LinearPrice
+    Price.Rule.ConstantPrice
+    Price.Unit
+    Price.Volume
 
   -- Modules included in this library but not exported.
   -- other-modules:

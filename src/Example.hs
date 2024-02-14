@@ -1,14 +1,15 @@
 module Example where
 
-import           Cost          (Cost)
-import           Data.Hashable (Hashable (hash))
-import           Metric        (Metric (Metric))
-import           Money         (Money (..))
+import           Data.Hashable          (Hashable (hash))
+import           Price.Cost             (Cost)
+import           Price.Metric           (Metric (Metric))
+import           Price.Money            (Money (..))
 
-import           Consumption   (Consumption(..))
-import           Price         (LinearPrice (..), calculateCosts)
-import           Unit          (Unit (..))
-import           Volume        (Volume (..))
+import           Price                  (calculateCosts, currencyMoney)
+import           Price.Consumption      (Consumption (..))
+import           Price.Rule.LinearPrice (LinearPrice (..))
+import           Price.Unit             (Unit (..))
+import           Price.Volume           (Volume (..))
 
 minute :: Unit
 minute = Unit "min"
@@ -25,7 +26,7 @@ metrics = [
     ]
 
 price :: String -> Float
-price s = abs $ fromIntegral (hash s) / 1.0 ^ (10::Int)
+price s = abs $ fromIntegral (hash s) / (10 ^ (20::Int))
 
 fullPriceList :: [LinearPrice]
 fullPriceList = [genPrice m c | m <- metrics, c <- ["USD", "EUR", "TLR"]]
@@ -43,5 +44,5 @@ test_volume=Volume minute (60.0 * 60.0 * 24.0)
 costs :: [Cost]
 costs = calculateCosts fullPriceList (Consumption test_metric test_volume)
 
--- totalMoney :: Maybe Money
--- totalMoney = currencyMoney "USD" costs
+totalMoney :: Maybe Money
+totalMoney = currencyMoney "USD" costs
